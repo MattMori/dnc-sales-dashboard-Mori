@@ -13,7 +13,7 @@ const LoginImage = styled.img`
 function Login() {
     return (
         <>
-            <LoginArea> Login</LoginArea>
+            <LoginArea> LOGIN </LoginArea>
             <LoginImage />
         </>
     )
