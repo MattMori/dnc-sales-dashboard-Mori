@@ -1,10 +1,10 @@
 export interface Theme {
     appBackground: string;
     appColor: string;
-    AppDefaultStroke: string;
+    appDefaultStroke: string;
     appLogo: string;
-    AppSkeletonFrom: string;
-    AppSkeletonTo: string;
+    appSkeletonFrom: string;
+    appSkeletonTo: string;
     buttons: {
         alert: string;
         alertColor: string;
