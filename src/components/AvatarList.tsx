@@ -1,5 +1,5 @@
 import { StyledH2, StyledSpan } from "./Typographies";
-import { Avatar, Box, Container } from "@mui/material";
+import { Avatar, Box } from "@mui/material";
 import { pxToRem } from "@/utils";
 import { AvatarListProps } from "@/types";
 
