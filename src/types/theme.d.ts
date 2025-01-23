@@ -19,7 +19,7 @@ export interface Theme {
         alert: string;
         background: string;
         border: string;
-        sucess: string;
+        success: string;
         warning: string;
     }
 
@@ -36,6 +36,6 @@ export interface Theme {
     typography: {
         error: string;
         subtitle: string;
-        sucess: string;
+        success: string;
     }
 }

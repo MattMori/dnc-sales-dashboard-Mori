@@ -21,7 +21,7 @@ export const lightTheme: Theme = {
         alert: '#E80000',
         background: '#FFF',
         border: '#E0E0E0',
-        sucess: '#008000',
+        success: '#008000',
         warning: '#F7A300',
     },
 
@@ -38,7 +38,7 @@ export const lightTheme: Theme = {
     typography: {
         error: '#FF0202',
         subtitle: '#666',
-        sucess: '#008000',
+        success: '#008000',
     }
 }
 
@@ -63,7 +63,7 @@ export const darkTheme: Theme = {
         alert: '#E80000',
         background: '#0F1535',
         border: '#21497D',
-        sucess: '#008000',
+        success: '#008000',
         warning: '#F7A300',
     },
 
@@ -80,7 +80,7 @@ export const darkTheme: Theme = {
     typography: {
         error: '#FF0202',
         subtitle: '#89A7CE',
-        sucess: '#008000',
+        success: '#008000',
     }
 }
 
