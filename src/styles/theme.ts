@@ -21,7 +21,7 @@ export const lightTheme: Theme = {
         alert: '#E80000',
         background: '#FFF',
         border: '#E0E0E0',
-        sucess: '#008000',
+        success: '#008000',
         warning: '#F7A300',
     },
 

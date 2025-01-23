@@ -19,7 +19,7 @@ export interface Theme {
         alert: string;
         background: string;
         border: string;
-        sucess: string;
+        success: string;
         warning: string;
     }
 
