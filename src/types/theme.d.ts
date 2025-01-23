@@ -36,6 +36,6 @@ export interface Theme {
     typography: {
         error: string;
         subtitle: string;
-        sucess: string;
+        success: string;
     }
 }
