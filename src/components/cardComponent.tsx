@@ -27,7 +27,7 @@ export const CardComponent = styled.div`
 
         a{
             color: inherit;
-            text-decoration: none;
+            text-decoration: transparent;
         }
 
         

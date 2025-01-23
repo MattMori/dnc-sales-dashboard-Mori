@@ -33,7 +33,7 @@ export const StyledButton = styled.button<buttonProps>`
   }
 
   &.borderless-alert {
-    background-color: none;
+    background-color: transparent;
     color: ${(props) => props.theme.buttons.alert};
     padding: 0;
     height: 0;

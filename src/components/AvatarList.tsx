@@ -8,12 +8,13 @@ function AvatarList(props: AvatarListProps) {
         <>
             {
                 props.listData.map((item, index) => (
-                    <Box sx={{
-                        alignItems: 'center',
-                        display: 'flex',
-                        padding: `${pxToRem(10)} 0`,
-                        key: { index },
-                    }}>
+                    <Box
+                        key={index}
+                        sx={{
+                            alignItems: 'center',
+                            display: 'flex',
+                            padding: `${pxToRem(10)} 0`,
+                        }}>
                         <Box>
                             <Avatar
                                 alt={item.name}
