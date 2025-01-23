@@ -33,7 +33,7 @@ export interface Theme {
         placeholderColor: string;
     }
 
-    typography: {
+    typographies: {
         error: string;
         subtitle: string;
         success: string;

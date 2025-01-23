@@ -1,3 +1,4 @@
+export { default as CustomTable} from './CustomTable';
 export { default as FormComponent } from './Form-component';
 export { default as Header } from './Header';
 export {default as AvatarList} from './AvatarList';
