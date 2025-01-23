@@ -9,7 +9,7 @@ export const StyledForm = styled.form`
     row-gap: ${pxToRem(16)};
 `
 
-function formComponent(props: formComponentProps) {
+function FormComponent(props: formComponentProps) {
     const { inputs, buttons, message } = props
     return (
         <StyledForm>
@@ -27,4 +27,4 @@ function formComponent(props: formComponentProps) {
 
 }
 
-export default formComponent;
+export default FormComponent;
