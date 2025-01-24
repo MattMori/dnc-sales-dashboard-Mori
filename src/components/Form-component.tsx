@@ -19,9 +19,11 @@ function FormComponent(props: formComponentProps) {
             {buttons.map((buttonProps, index) => (
                 <StyledButton key={index} {...buttonProps} />
             ))}
-            {message && <p>{<div style={{ color: message.type === 'error' ? 'red' : 'green' }}>
-                {message.msg}
-            </div>}</p>}
+            {message && (
+                <p style={{ color: message.type === 'error' ? 'red' : 'green' }}>
+                    {message.msg}
+                </p>
+            )}
         </StyledForm>
     )
 
