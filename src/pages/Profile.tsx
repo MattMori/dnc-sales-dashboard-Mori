@@ -70,7 +70,7 @@ function Profile() {
         })
     }
 
-    const handleDelete = async (e: React.FormEvent) => {
+    const handleDelete = async () => {
         if (confirm('Tem certeza que deseja excluir sua conta? se sim, certifique-se de deletar os seus leads antes')) {
             try {
                 await profileDeleteData()
