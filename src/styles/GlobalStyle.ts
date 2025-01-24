@@ -1,4 +1,4 @@
-import { createGlobalStyle, keyframes  } from "styled-components";
+import { createGlobalStyle } from "styled-components";
 import { DefaultTheme } from "styled-components";
 import { pxToRem } from "@/utils";
 
