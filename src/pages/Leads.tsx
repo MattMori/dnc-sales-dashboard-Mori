@@ -24,7 +24,7 @@ function Leads() {
 
     const {
         loading: leadsDeleteLoading, deleteData: deleteLeadsData
-    } = useDelete<LeadsData>('leads/delete')
+    } = useDelete<AxiosRequestConfig>('leads/delete')
 
 
     const [createMessage, setCreateMessage] = useState<MessageProps>({
@@ -119,7 +119,7 @@ function Leads() {
                                                     ])}
                                                 />
                                             ) :
-                                                <StyledP>Você ainda não possui leads cadastrados</StyledP>
+                                                <StyledSpan>Você ainda não possui leads cadastrados</StyledSpan>
                                         }
                                     </>
                                 )
