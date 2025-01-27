@@ -3,6 +3,7 @@ import { Container, Grid } from '@mui/material'
 import { currencyConverter, highlightTextConverter } from '@/utils'
 import { useGet } from '@/Hooks'
 import { NewsData, HighLightsData, StarsData, CustomChartProps } from '@/types'
+import { Link } from 'react-router-dom'
 
 function Home() {
     const {
@@ -76,9 +77,11 @@ function Home() {
                                     <CardComponent className={highLightsLoading ? 'skeleton-loading skeleton-loading-mh1' : ''}>
                                         {!highLightsLoading && highLightsData && (
                                             <>
-                                                <StyledH2 className='mb-1' >Leads contactados</StyledH2>
-                                                <StyledH3 className='mb-1' size={40} lineheight={40}>{highLightsData[2].value}</StyledH3>
-                                                <StyledSpan>{highLightsData[2].subtitle}</StyledSpan>
+                                                <Link to='/leads'>
+                                                    <StyledH2 className='mb-1' >Leads contactados</StyledH2>
+                                                    <StyledH3 className='mb-1' size={40} lineheight={40}>{highLightsData[2].value}</StyledH3>
+                                                    <StyledSpan>{highLightsData[2].subtitle}</StyledSpan>
+                                                </Link>
                                             </>
                                         )}
                                     </CardComponent>
