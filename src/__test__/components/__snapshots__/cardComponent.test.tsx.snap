@@ -1,0 +1,297 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`cardComponent DarkTheme should math the snapshot with alert class 1`] = `
+<DocumentFragment>
+  .c0 {
+  background-color: #0F1535;
+  border: 0.0625rem solid #21497D;
+  border-radius: 0.5rem;
+  box-sizing: border-box;
+  padding: 1.5rem;
+  width: 100%;
+}
+
+.c0.alert {
+  background-color: #E80000;
+  border-color: #E80000;
+}
+
+.c0.success {
+  background-color: #008000;
+  border-color: #008000;
+}
+
+.c0.warning {
+  background-color: #F7A300;
+  border-color: #F7A300;
+}
+
+.c0 a {
+  color: inherit;
+  text-decoration: transparent;
+}
+
+<div
+    class="c0 alert"
+  />
+</DocumentFragment>
+`;
+
+exports[`cardComponent DarkTheme should math the snapshot with success class 1`] = `
+<DocumentFragment>
+  .c0 {
+  background-color: #0F1535;
+  border: 0.0625rem solid #21497D;
+  border-radius: 0.5rem;
+  box-sizing: border-box;
+  padding: 1.5rem;
+  width: 100%;
+}
+
+.c0.alert {
+  background-color: #E80000;
+  border-color: #E80000;
+}
+
+.c0.success {
+  background-color: #008000;
+  border-color: #008000;
+}
+
+.c0.warning {
+  background-color: #F7A300;
+  border-color: #F7A300;
+}
+
+.c0 a {
+  color: inherit;
+  text-decoration: transparent;
+}
+
+<div
+    class="c0 success"
+  />
+</DocumentFragment>
+`;
+
+exports[`cardComponent DarkTheme should math the snapshot with warning class 1`] = `
+<DocumentFragment>
+  .c0 {
+  background-color: #0F1535;
+  border: 0.0625rem solid #21497D;
+  border-radius: 0.5rem;
+  box-sizing: border-box;
+  padding: 1.5rem;
+  width: 100%;
+}
+
+.c0.alert {
+  background-color: #E80000;
+  border-color: #E80000;
+}
+
+.c0.success {
+  background-color: #008000;
+  border-color: #008000;
+}
+
+.c0.warning {
+  background-color: #F7A300;
+  border-color: #F7A300;
+}
+
+.c0 a {
+  color: inherit;
+  text-decoration: transparent;
+}
+
+<div
+    class="c0 warning"
+  />
+</DocumentFragment>
+`;
+
+exports[`cardComponent DarkTheme should math the snapshot without any class 1`] = `
+<DocumentFragment>
+  .c0 {
+  background-color: #0F1535;
+  border: 0.0625rem solid #21497D;
+  border-radius: 0.5rem;
+  box-sizing: border-box;
+  padding: 1.5rem;
+  width: 100%;
+}
+
+.c0.alert {
+  background-color: #E80000;
+  border-color: #E80000;
+}
+
+.c0.success {
+  background-color: #008000;
+  border-color: #008000;
+}
+
+.c0.warning {
+  background-color: #F7A300;
+  border-color: #F7A300;
+}
+
+.c0 a {
+  color: inherit;
+  text-decoration: transparent;
+}
+
+<div
+    class="c0"
+  />
+</DocumentFragment>
+`;
+
+exports[`cardComponent LightTheme should math the snapshot with alert class 1`] = `
+<DocumentFragment>
+  .c0 {
+  background-color: #FFF;
+  border: 0.0625rem solid #E0E0E0;
+  border-radius: 0.5rem;
+  box-sizing: border-box;
+  padding: 1.5rem;
+  width: 100%;
+}
+
+.c0.alert {
+  background-color: #E80000;
+  border-color: #E80000;
+}
+
+.c0.success {
+  background-color: #008000;
+  border-color: #008000;
+}
+
+.c0.warning {
+  background-color: #F7A300;
+  border-color: #F7A300;
+}
+
+.c0 a {
+  color: inherit;
+  text-decoration: transparent;
+}
+
+<div
+    class="c0 alert"
+  />
+</DocumentFragment>
+`;
+
+exports[`cardComponent LightTheme should math the snapshot with success class 1`] = `
+<DocumentFragment>
+  .c0 {
+  background-color: #FFF;
+  border: 0.0625rem solid #E0E0E0;
+  border-radius: 0.5rem;
+  box-sizing: border-box;
+  padding: 1.5rem;
+  width: 100%;
+}
+
+.c0.alert {
+  background-color: #E80000;
+  border-color: #E80000;
+}
+
+.c0.success {
+  background-color: #008000;
+  border-color: #008000;
+}
+
+.c0.warning {
+  background-color: #F7A300;
+  border-color: #F7A300;
+}
+
+.c0 a {
+  color: inherit;
+  text-decoration: transparent;
+}
+
+<div
+    class="c0 success"
+  />
+</DocumentFragment>
+`;
+
+exports[`cardComponent LightTheme should math the snapshot with warning class 1`] = `
+<DocumentFragment>
+  .c0 {
+  background-color: #FFF;
+  border: 0.0625rem solid #E0E0E0;
+  border-radius: 0.5rem;
+  box-sizing: border-box;
+  padding: 1.5rem;
+  width: 100%;
+}
+
+.c0.alert {
+  background-color: #E80000;
+  border-color: #E80000;
+}
+
+.c0.success {
+  background-color: #008000;
+  border-color: #008000;
+}
+
+.c0.warning {
+  background-color: #F7A300;
+  border-color: #F7A300;
+}
+
+.c0 a {
+  color: inherit;
+  text-decoration: transparent;
+}
+
+<div
+    class="c0 warning"
+  />
+</DocumentFragment>
+`;
+
+exports[`cardComponent LightTheme should math the snapshot without any class 1`] = `
+<DocumentFragment>
+  .c0 {
+  background-color: #FFF;
+  border: 0.0625rem solid #E0E0E0;
+  border-radius: 0.5rem;
+  box-sizing: border-box;
+  padding: 1.5rem;
+  width: 100%;
+}
+
+.c0.alert {
+  background-color: #E80000;
+  border-color: #E80000;
+}
+
+.c0.success {
+  background-color: #008000;
+  border-color: #008000;
+}
+
+.c0.warning {
+  background-color: #F7A300;
+  border-color: #F7A300;
+}
+
+.c0 a {
+  color: inherit;
+  text-decoration: transparent;
+}
+
+<div
+    class="c0"
+  />
+</DocumentFragment>
+`;
