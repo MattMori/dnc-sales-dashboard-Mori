@@ -1,6 +1,4 @@
 export interface AppThemeContextProps {
-    appTheme: string;
-    toggleTheme: () => void;
-    }
-
-    
+  appTheme: string
+  toggleTheme: () => void
+}

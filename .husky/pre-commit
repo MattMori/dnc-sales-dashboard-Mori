@@ -1,0 +1,27 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+echo "Iniciando testes de pré-commit"
+
+# Verifica formatação com Prettier
+echo "Verificando formatação com Prettier..."
+npm run format -- --check || {
+    echo "Erro na formatação com Prettier!"
+    exit 1
+}
+
+# Executa ESLint
+echo "Executando ESLint..."
+npm run lint || {
+    echo "Erro ao executar ESLint!"
+    exit 1
+}
+
+# Roda testes unitários
+echo "Executando testes unitários..."
+npm run test || {
+    echo "Erro nos testes unitários!"
+    exit 1
+}
+
+echo "Todos os testes de pré-commit passaram!"

@@ -1,7 +1,6 @@
 export interface TypographiesProps {
-    Color?: string;
-    size?: number;
-    lineheight?: number;
-    weight?: number; 
-
+  Color?: string
+  size?: number
+  lineheight?: number
+  weight?: number
 }

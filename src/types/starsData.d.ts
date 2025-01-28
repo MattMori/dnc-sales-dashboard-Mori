@@ -1,4 +1,4 @@
-export interface StarsData{
-    name: string;
-    value: number;
+export interface StarsData {
+  name: string
+  value: number
 }

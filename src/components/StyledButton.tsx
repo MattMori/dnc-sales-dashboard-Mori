@@ -1,6 +1,6 @@
-import styled from 'styled-components';
-import { buttonProps } from '@/types';
-import { pxToRem } from '@/utils';
+import styled from 'styled-components'
+import { buttonProps } from '@/types'
+import { pxToRem } from '@/utils'
 
 export const StyledButton = styled.button<buttonProps>`
   border-radius: ${pxToRem(8)};
@@ -53,4 +53,4 @@ export const StyledButton = styled.button<buttonProps>`
       color: ${(props) => props.theme.buttons.disabledColor};
     }
   }
-`;
+`

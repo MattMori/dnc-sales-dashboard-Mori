@@ -1,6 +1,6 @@
-import { createGlobalStyle } from "styled-components";
-import { DefaultTheme } from "styled-components";
-import { pxToRem } from "@/utils";
+import { createGlobalStyle } from 'styled-components'
+import { DefaultTheme } from 'styled-components'
+import { pxToRem } from '@/utils'
 
 export const GlobalStyle = createGlobalStyle<{ theme?: DefaultTheme }>`
     body, html {
@@ -46,4 +46,4 @@ export const GlobalStyle = createGlobalStyle<{ theme?: DefaultTheme }>`
 
 `
 
-export default GlobalStyle;
+export default GlobalStyle
