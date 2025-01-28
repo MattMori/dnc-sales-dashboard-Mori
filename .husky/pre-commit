@@ -1,6 +1,3 @@
-#!/bin/sh
-. "$(dirname "$0")/_/husky.sh"
-
 echo "Iniciando testes de pré-commit"
 
 # Verifica formatação com Prettier
