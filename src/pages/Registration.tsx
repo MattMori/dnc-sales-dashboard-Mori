@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect } from 'react'
+import { ChangeEvent, useEffect, useState } from 'react'
 import { pxToRem } from '@/utils'
 import { Box, Container, Grid } from '@mui/material'
 import {
@@ -10,23 +10,29 @@ import {
   StyledUl,
 } from '@/components'
 import { useFormValidation, usePost } from '@/Hooks'
-// Redux
-import { useDispatch, useSelector } from 'react-redux'
-import { RootState } from '@/redux'
+import { useDispatch } from 'react-redux'
 import { setMessage, setProfileData } from '@/redux/slices/createProfile'
-import { CreateProfileData, inputProps } from '@/types'
+import {
+  CreateProfileData,
+  CreateProfileResponse,
+  DecodedJwt,
+  inputProps,
+} from '@/types'
 import { useNavigate } from 'react-router-dom'
+import Cookies from 'js-cookie'
+import { jwtExpirationDateConverter } from '@/utils'
+import { jwtDecode } from 'jwt-decode'
 
 function Registration() {
-  const Dispatch = useDispatch()
+  const dispatch = useDispatch()
   const navigate = useNavigate()
-  const { email } = useSelector((state: RootState) => state.createProfile)
 
-  const { data, loading, error, postData } = usePost<String, CreateProfileData>(
-    'profile/create',
-  )
+  const [registrationEmail, setRegistrationEmail] = useState('')
 
-  //Form Step 1
+  const { data, loading, error, postData } = usePost<
+    CreateProfileResponse,
+    CreateProfileData
+  >('usuario/criar', true)
 
   const step1Inputs: inputProps[] = [
     { name: 'name', type: 'text', placeholder: 'Nome', required: true },
@@ -36,9 +42,11 @@ function Registration() {
 
   const HandleStep1 = (e: React.FormEvent) => {
     e.preventDefault()
-    Dispatch(
+    const emailValue = String(step1FormValues[1])
+    setRegistrationEmail(emailValue)
+    dispatch(
       setProfileData({
-        email: String(step1FormValues[1]),
+        email: emailValue,
       }),
     )
   }
@@ -49,7 +57,6 @@ function Registration() {
     handleChange: step1FormHandleChange,
   } = useFormValidation(step1Inputs)
 
-  //Form Step 2
   const step2Inputs: inputProps[] = [{ type: 'password', placeholder: 'Senha' }]
 
   const HandleStep2 = (e: React.FormEvent) => {
@@ -68,18 +75,35 @@ function Registration() {
     handleChange: step2FormHandleChange,
   } = useFormValidation(step2Inputs)
 
-  const handleStepInputs = email ? step2Inputs : step1Inputs
+  const handleStepInputs = registrationEmail ? step2Inputs : step1Inputs
 
   useEffect(() => {
-    if (data !== null) {
-      Dispatch(setMessage('Cadastro realizado com sucesso!'))
-      navigate('/')
-    } else if (error !== null) {
+    if (data) {
+      const xAuthToken = data['x-auth-token']
+      if (xAuthToken) {
+        const decoded: DecodedJwt = jwtDecode(xAuthToken)
+        Cookies.set('x_auth_token', xAuthToken, {
+          expires: jwtExpirationDateConverter(decoded.exp),
+          secure: true,
+          sameSite: 'Strict',
+        })
+
+        setTimeout(() => {
+          dispatch(setMessage('Cadastro realizado com sucesso!'))
+          navigate('/home')
+        }, 100)
+      } else {
+        dispatch(
+          setMessage('Cadastro realizado com sucesso! Por favor, faça login.'),
+        )
+        navigate('/')
+      }
+    } else if (error) {
       alert(
         `Não foi possível realizar a operação, entre em contato com o suporte. ${error}`,
       )
     }
-  }, [data, error, navigate])
+  }, [data, error, navigate, dispatch])
 
   return (
     <Box>
@@ -96,14 +120,14 @@ function Registration() {
             </Box>
             <Box sx={{ marginBottom: pxToRem(24) }}>
               <StyledH1>
-                {email ? 'Defina sua senha' : 'Faça seu cadastro'}
+                {registrationEmail ? 'Defina sua senha' : 'Faça seu cadastro'}
               </StyledH1>
               <StyledP>
-                {email
+                {registrationEmail
                   ? ' Sua senha deve ter:'
                   : 'primeiro, diga-nos quem você é'}
               </StyledP>
-              {email && (
+              {registrationEmail && (
                 <>
                   <StyledUl>
                     <li>Entre 8 e 16 caracteres;</li>
@@ -118,11 +142,11 @@ function Registration() {
               inputs={handleStepInputs.map((input, index) => ({
                 type: input.type,
                 placeholder: input.placeholder,
-                value: email
+                value: registrationEmail
                   ? step2FormValues[index] || ''
                   : step1FormValues[index] || '',
                 onChange: (e: ChangeEvent<HTMLInputElement>) =>
-                  email
+                  registrationEmail
                     ? step2FormHandleChange(
                         index,
                         (e.target as HTMLInputElement).value,
@@ -135,12 +159,12 @@ function Registration() {
               buttons={[
                 {
                   className: 'primary',
-                  disabled: email
+                  disabled: registrationEmail
                     ? !step2FormValid || loading
                     : !step1FormValid,
-                  onClick: email ? HandleStep2 : HandleStep1,
+                  onClick: registrationEmail ? HandleStep2 : HandleStep1,
                   type: 'submit',
-                  children: email ? 'Enviar' : 'Próximo',
+                  children: registrationEmail ? 'Enviar' : 'Próximo',
                 },
               ]}
             />

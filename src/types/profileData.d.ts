@@ -14,3 +14,8 @@ export interface CreateProfileData extends ProfileEditableData {
   password: string
   message?: string | null
 }
+
+export interface CreateProfileResponse {
+  'x-auth-token': string;
+  message?: string | null;
+}

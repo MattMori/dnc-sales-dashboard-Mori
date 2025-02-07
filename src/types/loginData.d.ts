@@ -1,8 +1,18 @@
 export interface LoginData {
-  jwt_token: string
+  status: string;
+  statusMensagem: string;
+  resposta: {
+    'x-auth-token': string;
+  };
+}
+
+
+export interface LoginError {
+  status: 'ERROR';
+  message: string;
 }
 
 export interface LoginPostData {
-  email: string
-  password: string
+  email: string;
+  password: string;
 }

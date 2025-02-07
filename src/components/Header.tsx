@@ -1,8 +1,13 @@
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 import { Logo } from '@/components'
-import { Avatar, Box, Container } from '@mui/material'
+import { Box, Container, Typography } from '@mui/material'
 import { pxToRem } from '@/utils'
+import { useProfileImage } from '@/Hooks/useProfileImage'
+import { useGet } from '@/Hooks'
+import { ProfileData } from '@/types'
+import { ProfileImage } from './ProfileImage'
+import PersonIcon from '@mui/icons-material/Person'
 
 const StyledHeader = styled.header`
   background-color: ${(props) => props.theme.appBackground};
@@ -10,7 +15,12 @@ const StyledHeader = styled.header`
   margin-bottom: ${pxToRem(37)};
   width: 100%;
 `
-function Header() {
+
+export const Header = () => {
+  const [profileImage] = useProfileImage()
+  const { data: profileData } = useGet<ProfileData>('/usuario/dados')
+  const userName = profileData?.resposta?.name || ''
+
   return (
     <StyledHeader>
       <Container maxWidth="lg">
@@ -25,16 +35,46 @@ function Header() {
           <Link to="/home">
             <Logo height={30} width={73} />
           </Link>
-          <Link to="/perfil">
-            <Avatar
-              alt="DNC Avatar"
-              src="/dnc-avatar.svg"
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 2,
+            }}
+          >
+            <Link to="/perfil">
+              <Box
+                sx={{
+                  width: 40,
+                  height: 40,
+                  borderRadius: '50%',
+                  overflow: 'hidden',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  border: '1px solid #ccc',
+                  '&:hover': {
+                    opacity: 0.8,
+                  },
+                }}
+              >
+                {profileImage ? (
+                  <ProfileImage initialImage={profileImage} size="small" />
+                ) : (
+                  <PersonIcon sx={{ fontSize: 24, color: '#ccc' }} />
+                )}
+              </Box>
+            </Link>
+            <Typography
+              variant="subtitle1"
               sx={{
-                width: pxToRem(40),
-                height: pxToRem(40),
+                color: 'text.primaryColor',
+                fontWeight: 500,
               }}
-            />
-          </Link>
+            >
+              {userName}
+            </Typography>
+          </Box>
         </Box>
       </Container>
     </StyledHeader>

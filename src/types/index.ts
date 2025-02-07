@@ -12,3 +12,19 @@ export * from './starsData'
 export * from './theme'
 export * from './typographies'
 export * from './leadsData'
+
+export interface CreateProfileData {
+    name: string;
+    email: string;
+    phone: string;
+    password: string;
+    message?: string;
+}
+
+export interface CreateProfileResponse {
+    status: string;
+    mensagem: string;
+    'x-auth-token'?: string;
+    // adicione outros campos conforme necessário
+}
+

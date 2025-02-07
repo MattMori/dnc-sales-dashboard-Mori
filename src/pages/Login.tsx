@@ -17,6 +17,7 @@ import { DecodedJwt, MessageProps, LoginData, LoginPostData } from '@/types'
 // Redux
 import { useSelector } from 'react-redux'
 import { RootState } from '@/redux'
+import { Link } from 'react-router-dom'
 
 function Login() {
   const navigate = useNavigate()
@@ -28,9 +29,12 @@ function Login() {
     { type: 'email', placeholder: 'Email' },
     { type: 'password', placeholder: 'Senha' },
   ]
+
   const { data, loading, error, postData } = usePost<LoginData, LoginPostData>(
-    'login',
+    '/usuario/logar', // Endpoint alterado
   )
+  console.log('data', data)
+
   const { formValues, formValid, handleChange } = useFormValidation(inputs)
 
   const handleMessage = (): MessageProps => {
@@ -58,14 +62,32 @@ function Login() {
   }
 
   useEffect(() => {
-    if (data?.jwt_token) {
-      const decoded: DecodedJwt = jwtDecode(data.jwt_token)
-      Cookies.set('Authorization', data.jwt_token, {
+    console.log('Executando useEffect - Verificando token')
+    if (data?.resposta?.['x-auth-token']) {
+      const token = data.resposta['x-auth-token']
+      const decoded = jwtDecode<DecodedJwt>(token)
+
+      console.log('Token recebido no login:', token.substring(0, 20) + '...')
+
+      Cookies.set('Authorization', token, {
         expires: jwtExpirationDateConverter(decoded.exp),
-        secure: true,
+        sameSite: 'Lax',
+        path: '/',
       })
+
+      // Verificação adicional
+      const savedToken = Cookies.get('Authorization')
+      console.log(
+        'Token salvo nos cookies:',
+        savedToken ? savedToken.substring(0, 20) + '...' : 'Ausente',
+      )
+
+      navigate('/home')
     }
-    if (Cookies.get('Authorization')) navigate('/home')
+    if (Cookies.get('Authorization')) {
+      console.log('Token já está armazenado nos cookies')
+      navigate('/home')
+    }
   }, [data, navigate])
 
   useEffect(() => {
@@ -110,6 +132,17 @@ function Login() {
               ]}
               message={handleMessage()}
             />
+            <Box sx={{ marginTop: pxToRem(16), textAlign: 'center' }}>
+              <StyledP>
+                Não tem uma conta?{' '}
+                <Link
+                  to="/cadastro"
+                  style={{ textDecoration: 'none', color: '#3f51b5' }}
+                >
+                  Crie sua conta
+                </Link>
+              </StyledP>
+            </Box>
           </Container>
         </Grid>
         <Grid item sm={6} sx={{ display: { xs: 'none', sm: 'block' } }}>
