@@ -13,13 +13,7 @@ import {
   StyledH1,
   StyledP,
 } from '@/components'
-import {
-  DecodedJwt,
-  MessageProps,
-  LoginData,
-  LoginPostData,
-  CreateProfileData,
-} from '@/types'
+import { DecodedJwt, MessageProps, LoginData, LoginPostData } from '@/types'
 // Redux
 import { useSelector } from 'react-redux'
 import { RootState } from '@/redux'

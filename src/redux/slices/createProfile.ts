@@ -1,7 +1,9 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { CreateProfileData } from '@/types'
 
-interface AuthState extends Omit<CreateProfileData, 'name' | 'phone' | 'password'> {
+
+// Definindo a interface AuthState corretamente
+interface AuthState {
+  email: string;
   message: string | null;
 }
 
@@ -16,9 +18,7 @@ const profileSlice = createSlice({
   reducers: {
     setProfileData(
       state,
-      action: PayloadAction<
-        Omit<CreateProfileData, 'name' | 'phone' | 'password'>
-      >,
+      action: PayloadAction<{ email: string }>,
     ) {
       state.email = action.payload.email
     },

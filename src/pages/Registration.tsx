@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect } from 'react'
+import { ChangeEvent, useEffect, useState } from 'react'
 import { pxToRem } from '@/utils'
 import { Box, Container, Grid } from '@mui/material'
 import {
@@ -14,7 +14,12 @@ import { useFormValidation, usePost } from '@/Hooks'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '@/redux'
 import { setMessage, setProfileData } from '@/redux/slices/createProfile'
-import { CreateProfileData, CreateProfileResponse, DecodedJwt, inputProps } from '@/types'
+import {
+  CreateProfileData,
+  CreateProfileResponse,
+  DecodedJwt,
+  inputProps,
+} from '@/types'
 import { useNavigate } from 'react-router-dom'
 import Cookies from 'js-cookie'
 import { jwtExpirationDateConverter } from '@/utils'
@@ -23,15 +28,19 @@ import { jwtDecode } from 'jwt-decode'
 function Registration() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
-  const { email } = useSelector((state: RootState) => state.createProfile)
+  // Remover o uso do email do Redux
+  // const { email } = useSelector((state: RootState) => state.createProfile)
 
-  const { data, loading, error, postData } = usePost<CreateProfileResponse, CreateProfileData>(
+  // Criar um estado local para o email do registro
+  const [registrationEmail, setRegistrationEmail] = useState('')
+
+  const { data, loading, error, postData } = usePost<
+    CreateProfileResponse,
+    CreateProfileData
+  >(
     'usuario/criar',
-    true // Passando "withAuth" como true, se necessário
-  );
-
-
-
+    true, // Passando "withAuth" como true, se necessário
+  )
 
   // Form Step 1
   const step1Inputs: inputProps[] = [
@@ -42,9 +51,11 @@ function Registration() {
 
   const HandleStep1 = (e: React.FormEvent) => {
     e.preventDefault()
+    const emailValue = String(step1FormValues[1])
+    setRegistrationEmail(emailValue) // Salva o email no estado local
     dispatch(
       setProfileData({
-        email: String(step1FormValues[1]),
+        email: emailValue,
       }),
     )
   }
@@ -74,12 +85,11 @@ function Registration() {
     handleChange: step2FormHandleChange,
   } = useFormValidation(step2Inputs)
 
-  const handleStepInputs = email ? step2Inputs : step1Inputs
+  // Usar registrationEmail em vez do email do Redux
+  const handleStepInputs = registrationEmail ? step2Inputs : step1Inputs
 
   useEffect(() => {
     if (data) {
-      dispatch(setMessage('Cadastro realizado com sucesso!'))
-
       // Salvar o x-auth-token nos cookies após o cadastro
       const xAuthToken = data['x-auth-token']
       if (xAuthToken) {
@@ -89,17 +99,25 @@ function Registration() {
           secure: true,
           sameSite: 'Strict',
         })
-      }
 
-      navigate('/home')
+        // Adiciona uma pequena espera para garantir que o cookie seja salvo
+        setTimeout(() => {
+          dispatch(setMessage('Cadastro realizado com sucesso!'))
+          navigate('/home')
+        }, 100)
+      } else {
+        // Se não receber o token, redireciona para o login
+        dispatch(
+          setMessage('Cadastro realizado com sucesso! Por favor, faça login.'),
+        )
+        navigate('/')
+      }
     } else if (error) {
       alert(
         `Não foi possível realizar a operação, entre em contato com o suporte. ${error}`,
       )
     }
   }, [data, error, navigate, dispatch])
-
-
 
   return (
     <Box>
@@ -116,14 +134,14 @@ function Registration() {
             </Box>
             <Box sx={{ marginBottom: pxToRem(24) }}>
               <StyledH1>
-                {email ? 'Defina sua senha' : 'Faça seu cadastro'}
+                {registrationEmail ? 'Defina sua senha' : 'Faça seu cadastro'}
               </StyledH1>
               <StyledP>
-                {email
+                {registrationEmail
                   ? ' Sua senha deve ter:'
                   : 'primeiro, diga-nos quem você é'}
               </StyledP>
-              {email && (
+              {registrationEmail && (
                 <>
                   <StyledUl>
                     <li>Entre 8 e 16 caracteres;</li>
@@ -138,29 +156,29 @@ function Registration() {
               inputs={handleStepInputs.map((input, index) => ({
                 type: input.type,
                 placeholder: input.placeholder,
-                value: email
+                value: registrationEmail
                   ? step2FormValues[index] || ''
                   : step1FormValues[index] || '',
                 onChange: (e: ChangeEvent<HTMLInputElement>) =>
-                  email
+                  registrationEmail
                     ? step2FormHandleChange(
-                      index,
-                      (e.target as HTMLInputElement).value,
-                    )
+                        index,
+                        (e.target as HTMLInputElement).value,
+                      )
                     : step1FormHandleChange(
-                      index,
-                      (e.target as HTMLInputElement).value,
-                    ),
+                        index,
+                        (e.target as HTMLInputElement).value,
+                      ),
               }))}
               buttons={[
                 {
                   className: 'primary',
-                  disabled: email
+                  disabled: registrationEmail
                     ? !step2FormValid || loading
                     : !step1FormValid,
-                  onClick: email ? HandleStep2 : HandleStep1,
+                  onClick: registrationEmail ? HandleStep2 : HandleStep1,
                   type: 'submit',
-                  children: email ? 'Enviar' : 'Próximo',
+                  children: registrationEmail ? 'Enviar' : 'Próximo',
                 },
               ]}
             />
