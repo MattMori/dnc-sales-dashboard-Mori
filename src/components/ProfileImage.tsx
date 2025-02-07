@@ -36,15 +36,19 @@ export const ProfileImage = ({
     }
   }, [initialImage])
 
+  const imageStyle = {
+    objectFit: 'cover',
+    borderRadius: '50%',
+    width: size === 'large' ? '150px' : '40px',
+    height: size === 'large' ? '150px' : '40px',
+  }
+
   return (
     <img
       src={imageError ? defaultImage : profileImage || defaultImage}
       alt={alt}
       style={{
-        width: '100%',
-        height: '100%',
-        objectFit: 'cover',
-        ...defaultStyles[size],
+        ...imageStyle,
         ...style,
       }}
       onError={() => setImageError(true)}

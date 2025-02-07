@@ -13,3 +13,16 @@ export * from './theme'
 export * from './typographies'
 export * from './leadsData'
 
+export interface CreateProfileData {
+    name: string;
+    email: string;
+    phone: string;
+    password: string;
+}
+
+export interface CreateProfileResponse {
+    status: string;
+    mensagem: string;
+    // adicione outros campos conforme necessário
+}
+
