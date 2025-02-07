@@ -10,9 +10,7 @@ import {
   StyledUl,
 } from '@/components'
 import { useFormValidation, usePost } from '@/Hooks'
-// Redux
-import { useDispatch, useSelector } from 'react-redux'
-import { RootState } from '@/redux'
+import { useDispatch } from 'react-redux'
 import { setMessage, setProfileData } from '@/redux/slices/createProfile'
 import {
   CreateProfileData,
@@ -28,21 +26,14 @@ import { jwtDecode } from 'jwt-decode'
 function Registration() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
-  // Remover o uso do email do Redux
-  // const { email } = useSelector((state: RootState) => state.createProfile)
 
-  // Criar um estado local para o email do registro
   const [registrationEmail, setRegistrationEmail] = useState('')
 
   const { data, loading, error, postData } = usePost<
     CreateProfileResponse,
     CreateProfileData
-  >(
-    'usuario/criar',
-    true, // Passando "withAuth" como true, se necessário
-  )
+  >('usuario/criar', true)
 
-  // Form Step 1
   const step1Inputs: inputProps[] = [
     { name: 'name', type: 'text', placeholder: 'Nome', required: true },
     { name: 'email', type: 'email', placeholder: 'Email' },
@@ -52,7 +43,7 @@ function Registration() {
   const HandleStep1 = (e: React.FormEvent) => {
     e.preventDefault()
     const emailValue = String(step1FormValues[1])
-    setRegistrationEmail(emailValue) // Salva o email no estado local
+    setRegistrationEmail(emailValue)
     dispatch(
       setProfileData({
         email: emailValue,
@@ -66,7 +57,6 @@ function Registration() {
     handleChange: step1FormHandleChange,
   } = useFormValidation(step1Inputs)
 
-  // Form Step 2
   const step2Inputs: inputProps[] = [{ type: 'password', placeholder: 'Senha' }]
 
   const HandleStep2 = (e: React.FormEvent) => {
@@ -85,12 +75,10 @@ function Registration() {
     handleChange: step2FormHandleChange,
   } = useFormValidation(step2Inputs)
 
-  // Usar registrationEmail em vez do email do Redux
   const handleStepInputs = registrationEmail ? step2Inputs : step1Inputs
 
   useEffect(() => {
     if (data) {
-      // Salvar o x-auth-token nos cookies após o cadastro
       const xAuthToken = data['x-auth-token']
       if (xAuthToken) {
         const decoded: DecodedJwt = jwtDecode(xAuthToken)
@@ -100,13 +88,11 @@ function Registration() {
           sameSite: 'Strict',
         })
 
-        // Adiciona uma pequena espera para garantir que o cookie seja salvo
         setTimeout(() => {
           dispatch(setMessage('Cadastro realizado com sucesso!'))
           navigate('/home')
         }, 100)
       } else {
-        // Se não receber o token, redireciona para o login
         dispatch(
           setMessage('Cadastro realizado com sucesso! Por favor, faça login.'),
         )
