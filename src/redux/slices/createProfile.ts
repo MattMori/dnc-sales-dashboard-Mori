@@ -2,12 +2,12 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { CreateProfileData } from '@/types'
 
 interface AuthState extends Omit<CreateProfileData, 'name' | 'phone' | 'password'> {
-  message: string;
+  message: string | null;
 }
 
 const initialState: AuthState = {
   email: '',
-  message: ''
+  message: null
 }
 
 const profileSlice = createSlice({
@@ -25,8 +25,12 @@ const profileSlice = createSlice({
     setMessage(state, action: PayloadAction<string | null>) {
       state.message = action.payload
     },
+    clearState(state) {
+      state.email = ''
+      state.message = null
+    }
   },
 })
 
-export const { setProfileData, setMessage } = profileSlice.actions
+export const { setProfileData, setMessage, clearState } = profileSlice.actions
 export default profileSlice.reducer
