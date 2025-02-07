@@ -408,7 +408,7 @@ function Profile() {
                             const { value } = e.target
                             setFormData((prev) => ({
                               ...prev,
-                              [input.name]: value,
+                              [input.name as keyof typeof formData]: value,
                             }))
                             handleChange(index, value)
                           },
