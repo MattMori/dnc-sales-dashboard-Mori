@@ -1,244 +1,113 @@
-import {
-  CardComponent,
-  Header,
-  AvatarList,
-  CustomTable,
-  StyledH2,
-  StyledH3,
-  CustomChart,
-  StyledSpan,
-} from '@/components'
-import { Container, Grid } from '@mui/material'
-import { currencyConverter, highlightTextConverter } from '@/utils'
-import { useGet } from '@/Hooks'
-import { NewsData, HighLightsData, StarsData, CustomChartProps } from '@/types'
-import { Link } from 'react-router-dom'
+import React, { useEffect, useState } from "react";
+import { Container, Box, Typography, Grid } from "@mui/material";
+import ResumoFinanceiro from './../components/ResumoFinanceiro';
+import ListaTransacoes from './../components/ListaTransacoes';
+import LimiteGastos from './../components/LimiteGastos';
+import Investimentos from './../components/Investimentos';
+import { Header } from "@/components";
+import Cookies from "js-cookie";
 
-function Home() {
-  const {
-    data: highLightsData,
-    loading: highLightsLoading,
-    error: highLightsError,
-  } = useGet<HighLightsData[]>('sales/highlights')
 
-  const {
-    data: salesMonthData,
-    loading: salesMonthLoading,
-    error: salesMonthError,
-  } = useGet<CustomChartProps>('sales/month')
+interface Resumo {
+  receita: number;
+  despesa: number;
+  totalFinal: number;
+}
 
-  const {
-    data: salesStarsData,
-    loading: salesStarsLoading,
-    error: salesStarsError,
-  } = useGet<StarsData[]>('sales/stars')
+interface Transacao {
+  _id: string;
+  description: string;
+  type: string;
+  value: number;
+}
 
-  const {
-    data: newsData,
-    loading: NewsLoading,
-    error: NewsError,
-  } = useGet<NewsData[]>('news')
+interface LimiteGastos {
+  valorLimite: number;
+  statusLimite: string;
+  totalDespesas: number;
+}
 
-  const {
-    data: salesYearData,
-    loading: salesYearLoading,
-    error: salesYearError,
-  } = useGet<CustomChartProps>('sales/year')
+interface Investimento {
+  _id: string;
+  nomeAtivo: string;
+  tipoInvestimento: string;
+  valorInvestido: number;
+  plataforma: string;
+}
+
+const Home: React.FC = () => {
+  const [resumo, setResumo] = useState<Resumo | null>(null);
+  const [transacoes, setTransacoes] = useState<Transacao[]>([]);
+  const [limiteGastos, setLimiteGastos] = useState<LimiteGastos | null>(null);
+  const [investimentos, setInvestimentos] = useState<Investimento[]>([]);
+
+  useEffect(() => {
+    fetch("/transacao/resumo-financeiro/listar", {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => setResumo(data))
+      .catch((error) => console.error("Erro ao buscar resumo financeiro:", error));
+
+    fetch("/transacao/listar", {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${Cookies.get("Authorization")}`,
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => setTransacoes(data))
+      .catch((error) => console.error("Erro ao buscar transações:", error));
+
+    fetch("/limiteDeGastos/status", {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => setLimiteGastos(data))
+      .catch((error) => console.error("Erro ao buscar limite de gastos:", error));
+
+    fetch("/investimento/listar", {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => setInvestimentos(data))
+      .catch((error) => console.error("Erro ao buscar investimentos:", error));
+  }, []);
 
   return (
     <>
       <Header />
-      <Container className="mb-2" maxWidth="lg">
-        <Grid container spacing={4}>
-          {!highLightsError && (
-            <>
-              <Grid item xs={12} md={4}>
-                <CardComponent
-                  id="total-sales"
-                  className={
-                    highLightsLoading
-                      ? 'skeleton-loading skeleton-loading-mh1'
-                      : ''
-                  }
-                >
-                  {!highLightsLoading && highLightsData && (
-                    <>
-                      <StyledH2 className="mb-1">
-                        Total de vendas no mês
-                      </StyledH2>
-                      <StyledH3 className="mb-1" size={40} lineheight={40}>
-                        {currencyConverter(highLightsData[0].value)}
-                      </StyledH3>
-                      <StyledSpan>{highLightsData[0].subtitle}</StyledSpan>
-                    </>
-                  )}
-                </CardComponent>
-              </Grid>
+      <Container maxWidth="lg">
+        <Box my={4}>
+          <Typography variant="h4" gutterBottom>
+            Dashboard Financeiro
+          </Typography>
 
-              <Grid item xs={12} md={4}>
-                <CardComponent
-                  id="month-goals"
-                  className={
-                    highLightsData
-                      ? highLightsData[1].subtitle
-                      : 'skeleton-loading skeleton-loading-mh1'
-                  }
-                >
-                  {!highLightsLoading && highLightsData && (
-                    <>
-                      <StyledH2 className="mb-1" color="white">
-                        Meta do mês
-                      </StyledH2>
-                      <StyledH3
-                        className="mb-1"
-                        color="white"
-                        size={40}
-                        lineheight={40}
-                      >
-                        {currencyConverter(highLightsData[1].value)}
-                      </StyledH3>
-                      <StyledSpan color="white">
-                        {highlightTextConverter(highLightsData[1].subtitle)}
-                      </StyledSpan>
-                    </>
-                  )}
-                </CardComponent>
-              </Grid>
+          {/* Resumo financeiro */}
+          {resumo && <ResumoFinanceiro resumo={resumo} />}
 
-              <Grid item xs={12} md={4}>
-                <CardComponent
-                  id="total-leads"
-                  className={
-                    highLightsLoading
-                      ? 'skeleton-loading skeleton-loading-mh1'
-                      : ''
-                  }
-                >
-                  {!highLightsLoading && highLightsData && (
-                    <>
-                      <Link to="/leads">
-                        <StyledH2 className="mb-1">Leads contactados</StyledH2>
-                        <StyledH3 className="mb-1" size={40} lineheight={40}>
-                          {highLightsData[2].value}
-                        </StyledH3>
-                        <StyledSpan>{highLightsData[2].subtitle}</StyledSpan>
-                      </Link>
-                    </>
-                  )}
-                </CardComponent>
-              </Grid>
-            </>
-          )}
-          <Grid item xs={12} md={7}>
-            {!salesMonthError && salesMonthData && (
-              <CardComponent
-                id="month-sales-chart"
-                className={
-                  salesMonthLoading
-                    ? 'skeleton-loading skeleton-loading-mh2'
-                    : ''
-                }
-              >
-                {!salesMonthLoading && salesMonthData && (
-                  <>
-                    <StyledH2 className="mb-1">Valor de vendas no mês</StyledH2>
-                    <CustomChart
-                      labels={salesMonthData.labels.map((label) => label)}
-                      data={salesMonthData.data.map((data) => data)}
-                      type={salesMonthData.type}
-                    />
-                  </>
-                )}
-              </CardComponent>
-            )}
-          </Grid>
-          <Grid item xs={12} md={5}>
-            {!salesStarsError && salesStarsData && (
-              <CardComponent
-                id="sales-stars"
-                className={
-                  salesStarsLoading
-                    ? 'skeleton-loading skeleton-loading-mh2'
-                    : ''
-                }
-              >
-                {!salesStarsLoading && salesStarsData && (
-                  <>
-                    <StyledH2 className="mb-1">
-                      Maiores Vendedores do Mês
-                    </StyledH2>
-                    <AvatarList
-                      listData={salesStarsData.map((star) => ({
-                        avatar: '/dnc-avatar.svg',
-                        name: star.name,
-                        subtitle: currencyConverter(star.value),
-                      }))}
-                    />
-                  </>
-                )}
-              </CardComponent>
-            )}
-          </Grid>
-          <Grid item xs={12} md={5}>
-            {!NewsError && newsData && (
-              <CardComponent
-                id="news"
-                className={
-                  NewsLoading ? 'skeleton-loading skeleton-loading-mh2' : ''
-                }
-              >
-                {!NewsLoading && newsData && (
-                  <>
-                    <StyledH2 className="mb-1">Notícias</StyledH2>
-                    <CustomTable
-                      headers={['Titulo', 'Horario']}
-                      rows={newsData.map((news) => [
-                        <a
-                          className="ellipsis ellipsis-sm"
-                          href={news.link}
-                          target="_blank"
-                        >
-                          {news.title}
-                        </a>,
-                        <a href={news.link} target="_blank">
-                          {news.date}
-                        </a>,
-                      ])}
-                    />
-                  </>
-                )}
-              </CardComponent>
-            )}
-          </Grid>
-          <Grid item xs={12} md={7}>
-            {!salesYearError && salesYearData && (
-              <CardComponent
-                id="year-sales-chart"
-                className={
-                  salesYearLoading
-                    ? 'skeleton-loading skeleton-loading-mh2'
-                    : ''
-                }
-              >
-                {!salesYearLoading && salesYearData && (
-                  <>
-                    <StyledH2 className="mb-1">
-                      Valor de vendas por mês
-                    </StyledH2>
-                    <CustomChart
-                      labels={salesYearData.labels.map((label) => label)}
-                      data={salesYearData.data.map((data) => data)}
-                      type={salesYearData.type}
-                    />
-                  </>
-                )}
-              </CardComponent>
-            )}
-          </Grid>
-        </Grid>
+          {/* Limite de Gastos */}
+          {limiteGastos && <LimiteGastos limiteGastos={limiteGastos} />}
+
+          {/* Lista de Transações */}
+          <ListaTransacoes transacoes={transacoes} />
+
+          {/* Investimentos */}
+          <Investimentos investimentos={investimentos} />
+        </Box>
       </Container>
     </>
-  )
-}
 
-export default Home
+  );
+};
+
+export default Home;

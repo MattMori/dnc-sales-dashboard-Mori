@@ -3,8 +3,38 @@ import axios, { AxiosRequestConfig } from 'axios'
 import Cookies from 'js-cookie'
 
 const axiosInstance = axios.create({
-  baseURL: `${import.meta.env.VITE_API_BASE_URL}/`,
+  baseURL: import.meta.env.VITE_API_BASE_URL,
+  withCredentials: true,
+  headers: {
+    'Accept': 'application/json'
+  }
+});
+
+// Adicionar um interceptor para incluir o token em todas as requisições
+axiosInstance.interceptors.request.use((config) => {
+  const token = Cookies.get('Authorization')
+  if (token) {
+    config.headers['Authorization'] = `Bearer ${token}`
+  }
+  return config
 })
+
+// Adicione um interceptor para logs
+axiosInstance.interceptors.request.use(request => {
+  console.log('Requisição sendo enviada:', request);
+  return request;
+});
+
+axiosInstance.interceptors.response.use(
+  response => {
+    console.log('Resposta recebida:', response);
+    return response;
+  },
+  error => {
+    console.error('Erro na requisição:', error);
+    return Promise.reject(error);
+  }
+);
 
 export const usePost = <T, P>(endpoint: string, withAuth?: Boolean) => {
   const [data, setData] = useState<T | null>(null)
@@ -19,14 +49,14 @@ export const usePost = <T, P>(endpoint: string, withAuth?: Boolean) => {
     try {
       const headers = withAuth
         ? {
-            Authorization: `Bearer ${Cookies.get('Authorization')}`,
-            'Content-Type': 'application/json',
-            ...config?.headers,
-          }
+          Authorization: `Bearer ${Cookies.get('Authorization')}`,
+          'Content-Type': 'application/json',
+          ...config?.headers,
+        }
         : {
-            'Content-Type': 'application/json',
-            ...config?.headers,
-          }
+          'Content-Type': 'application/json',
+          ...config?.headers,
+        }
       const response = await axiosInstance({
         url: endpoint,
         method: 'POST',
@@ -48,25 +78,37 @@ export const usePost = <T, P>(endpoint: string, withAuth?: Boolean) => {
 export const useGet = <T>(endpoint: string, config?: AxiosRequestConfig) => {
   const [data, setData] = useState<T | null>(null)
   const [loading, setLoading] = useState(false)
-  const [error, setError] = useState(null)
+  const [error, setError] = useState<any>(null)
 
   const getData = async () => {
     setLoading(true)
     setError(null)
 
     try {
+      const token = Cookies.get('Authorization')
+      if (!token) {
+        console.error('Token não encontrado')
+        setError('Token não encontrado')
+        return
+      }
+
+      console.log('Fazendo requisição para:', `${import.meta.env.VITE_API_BASE_URL}${endpoint}`);
+      console.log('Token:', token);
+
       const response = await axiosInstance({
         url: endpoint,
         method: 'GET',
         headers: {
-          Authorization: `Bearer ${Cookies.get('Authorization')}`,
-          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
           ...config?.headers,
         },
         ...config,
       })
+
       setData(response.data)
     } catch (e: any) {
+      console.error('Erro completo:', e);
+      console.error('Resposta do erro:', e.response?.data);
       setError(e.response?.status ?? 500)
     } finally {
       setLoading(false)
@@ -75,7 +117,7 @@ export const useGet = <T>(endpoint: string, config?: AxiosRequestConfig) => {
 
   useEffect(() => {
     getData()
-  }, [])
+  }, [endpoint])
 
   return { data, loading, error, getData }
 }
@@ -140,4 +182,22 @@ export const usePut = <T>(endpoint: string) => {
   }
 
   return { data, loading, error, putData }
+}
+
+export const useAxios = () => {
+  const instance = axios.create({
+    baseURL: import.meta.env.VITE_API_BASE_URL,
+    withCredentials: true,
+  })
+
+  // Adicionar interceptor para o token
+  instance.interceptors.request.use((config) => {
+    const token = Cookies.get('Authorization')
+    if (token) {
+      config.headers['Authorization'] = `Bearer ${token}`
+    }
+    return config
+  })
+
+  return { axiosInstance: instance }
 }
