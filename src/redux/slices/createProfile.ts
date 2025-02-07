@@ -1,9 +1,13 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { CreateProfileData } from '@/types'
 
-const initialState: Omit<CreateProfileData, 'name' | 'phone' | 'password'> = {
+interface AuthState extends Omit<CreateProfileData, 'name' | 'phone' | 'password'> {
+  message: string;
+}
+
+const initialState: AuthState = {
   email: '',
-  message: null,
+  message: ''
 }
 
 const profileSlice = createSlice({

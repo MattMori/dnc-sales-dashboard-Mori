@@ -13,11 +13,22 @@ import {
   StyledH1,
   StyledP,
 } from '@/components'
-import { DecodedJwt, MessageProps, LoginData, LoginPostData } from '@/types'
+import {
+  DecodedJwt,
+  MessageProps,
+  LoginData,
+  LoginPostData,
+  CreateProfileData,
+} from '@/types'
 // Redux
 import { useSelector } from 'react-redux'
 import { RootState } from '@/redux'
 import { Link } from 'react-router-dom'
+
+interface LoginState
+  extends Omit<CreateProfileData, 'name' | 'phone' | 'password'> {
+  message: string // Adicionando explicitamente o campo message
+}
 
 function Login() {
   const navigate = useNavigate()

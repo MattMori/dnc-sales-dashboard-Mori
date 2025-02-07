@@ -18,11 +18,13 @@ export interface CreateProfileData {
     email: string;
     phone: string;
     password: string;
+    message?: string;
 }
 
 export interface CreateProfileResponse {
     status: string;
     mensagem: string;
+    'x-auth-token'?: string;
     // adicione outros campos conforme necessário
 }
 
